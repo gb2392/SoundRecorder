@@ -70,3 +70,4 @@ void clock_setup(void)
         RCC->CFGR &= ~RCC_CFGR_MCO;
         RCC->CFGR |= RCC_CFGR_MCO_2;
 }
+
