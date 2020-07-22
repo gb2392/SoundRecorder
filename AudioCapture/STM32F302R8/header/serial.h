@@ -8,8 +8,8 @@
 typedef struct
 {
         volatile uint8_t state;
-        uint16_t tx_length;
-        volatile uint16_t tx_index;
+        uint32_t tx_length;
+        volatile uint32_t tx_index;
         uint8_t * tx_data;
 }USART_1_RUNTIME;
 
