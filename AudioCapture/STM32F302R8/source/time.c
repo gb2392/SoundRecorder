@@ -1,6 +1,8 @@
 #include "stm32f302x8.h"
 #include "time.h"
 #include "debug.h"
+#include "serial.h"
+#include <stdint.h>
 
 /*
  *systick_setup - configures the SysTick hardware for use as a time base. 
@@ -36,8 +38,7 @@ void systick_setup(void)
  *
  *This function should run when the SysTick hardware generates an interrupt.
  *Assuming an interrupt is being generated every millisecond, this function
- *should also run every millisecond. Keep user code within this function as 
- *brief as possible!
+ *should also run every millisecond. Keep user code within this function short.
  */
 void SysTick_Handler(void)
 {
