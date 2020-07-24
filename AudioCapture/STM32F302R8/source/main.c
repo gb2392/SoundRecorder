@@ -7,6 +7,7 @@
 void main(void)
 {
         uint8_t test_vector[] = {0xab, 0xcd, 0xef, 0xde, 0xad, 0xbe, 0xef};
+        
 
         clock_setup();
         debug_setup();

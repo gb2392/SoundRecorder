@@ -91,7 +91,7 @@ uint8_t is_usart_1_ready(void)
 }
 
 /*
- *usart_1_transmit - employs USART1 to send a vector of data. 
+ *usart_1_transmit - employs USART1 to transmit a vector of data. 
  *void * data           : pointer to the start of the data to send
  *uint32_t length       : number of bytes to send
  *
@@ -100,6 +100,8 @@ uint8_t is_usart_1_ready(void)
  *to check whether USART1 is available to execute a new transmission. As well, 
  *the function "usart_1_setup" should have been called prior to any call to 
  *"usart_1_transmit". 
+ *
+ *Data is transmitted via pin PC4 (USART1 TX). 
  */
 void usart_1_transmit(void * data, uint32_t length)
 {
