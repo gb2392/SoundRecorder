@@ -1,7 +1,9 @@
 #include <stdio.h>
-#include <unistd.h>			
-#include <fcntl.h>			
-#include <termios.h>	
+#include <unistd.h>
+#include <fcntl.h>
+#include <termios.h>
+
+
 
 int serial_setup(char * port_name, unsigned int baud_rate)
 {
@@ -9,7 +11,7 @@ int serial_setup(char * port_name, unsigned int baud_rate)
 	int fd = -1;
 
 	fd = open(port_name, O_RDWR | O_NOCTTY );
-	
+
 	if(fd == -1)
 	{
 		printf("Failed to open port.\n");
@@ -17,7 +19,7 @@ int serial_setup(char * port_name, unsigned int baud_rate)
 	else
 	{
 		tcgetattr(fd, &cfg);
-		cfg.c_cflag = baud_rate | CS8 | CLOCAL | CREAD;		
+		cfg.c_cflag = baud_rate | CS8 | CLOCAL | CREAD;	
 		cfg.c_iflag = IGNPAR;
 		cfg.c_oflag = 0;
 		cfg.c_lflag = 0;
@@ -25,6 +27,7 @@ int serial_setup(char * port_name, unsigned int baud_rate)
 		tcsetattr(fd, TCSANOW, &cfg);
 		printf("Serial port ready.\n");
 	}
-	
+
 	return fd;
 }
+
