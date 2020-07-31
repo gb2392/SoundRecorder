@@ -17,6 +17,6 @@ and subsequently sent in batches to the Raspberry Pi via the microcontroller ser
 
 ## Current State
 
-* STM32 microcontroller is successfully transmitting data via serial port using interrupt driven software. 
+* STM32 microcontroller is successfully transmitting data via serial peripheral (USART) using interrupt driven software. 
 * STM32 microcontroller has a successful implementation of a 1 ms time base, using the SysTick hardware and corresponding handler. 
 * Raspberry Pi has a roughed-in implementation of software which can listen for incoming data on the serial interface and write it to file. There are issues here. 
