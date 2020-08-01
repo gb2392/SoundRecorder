@@ -12,7 +12,7 @@ An effort to create a system capable of capturing audio, and storing it to a fil
 
 ## Approach
 
-The analog-to-digital conversion of the microphone / pre-amp output is facilitated by the STM32 microcontroller. As the conversions occur, the samples will be staged 
+Analog-to-digital conversion of the microphone / pre-amp output will be facilitated by the STM32 microcontroller. As conversions occur, the samples will be staged 
 and subsequently sent in batches to the Raspberry Pi via the microcontroller serial port. The Raspberry Pi will receive and store the audio samples in a file. 
 
 ## Current State
