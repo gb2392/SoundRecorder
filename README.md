@@ -1,6 +1,6 @@
 # SoundRecorder
 
-## Summary
+## Overview
 
 An effort to create a system capable of capturing audio, and storing it to a file. 
 
