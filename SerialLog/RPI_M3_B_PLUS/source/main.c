@@ -14,7 +14,7 @@
  */
 void main(void)
 {
-	FILE * media_fp = fopen("data_file", "w");
+	FILE * media_fp = fopen("dat", "w");
 	int port_fd = serial_setup("/dev/serial0", B921600);
 
 	if(input_handling_setup(port_fd, media_fp) == 0)
@@ -28,6 +28,8 @@ void main(void)
 		if(getchar() == 'q')
 		{
 			printf("received a total of %u bytes\n", get_total_bytes_received());
+			printf("saving data\n");
+			fwrite(get_buf(), 1, get_total_bytes_received(), media_fp);
 			printf("closing file and exiting\n");
 			fclose(media_fp);
 			return;

@@ -3,8 +3,9 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#define STAGING_BUFFER_SIZE			5000000UL
+#define BUF_SIZE			10000000UL
 
+uint8_t * get_buf(void);
 uint32_t get_total_bytes_received(void);
 uint8_t input_handling_setup(int port_fd, FILE * media_fp);
 

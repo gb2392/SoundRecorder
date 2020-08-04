@@ -3,24 +3,41 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-static FILE * m_fp = NULL;
-static int p_fd = -1;
-static uint8_t staging_buffer[STAGING_BUFFER_SIZE];
-static uint16_t num_bytes_received;
-static uint32_t total_bytes_received = 0;
+static FILE * m_fp = NULL;			/*media file pointer*/
+static int p_fd = -1;				/*port file descriptor*/
+static uint8_t buf[BUF_SIZE];			/*rx buffer*/
+static uint32_t buf_index = 0;			/*rx buffer write index*/
+static uint32_t buf_remaining = BUF_SIZE;	/*space left in rx buffer*/
+static uint32_t num_read = 0;			/*bytes acquired with a read*/
 
 /*
- *input_handler - handler for servicing SIGIO. 
- *int x		: receives a signal number. 
+ *input_handler - handler for servicing SIGIO.
+ *int x		: receives a signal number.
  * 
- *Main purpose is to read available data from the serial port and then write it
- *to a file. 
+ *Reads available data into the rx buffer. Based on the number of data read,
+ *it increments the buffer write index and updates the variable which keeps 
+ *track of the space remaining in the buffer. 
+ *
+ *Note: buffer overruns are prevented by virtue of the "buf_remaining" variable
+ *settling at zero once the buffer capacity has been reached. Because 
+ *"buf_remaining" is used as the last argument to the "read" function call, 
+ *when it is zero, the read function will move no data and return zero. 
  */
 static void input_handler(int x)
 {
-	num_bytes_received = read(p_fd, staging_buffer, STAGING_BUFFER_SIZE);
-	fwrite((void *)staging_buffer, 1, num_bytes_received, m_fp);
-	total_bytes_received += num_bytes_received;
+	num_read = read(p_fd, &(buf[buf_index]), buf_remaining);
+	buf_index += num_read;
+	buf_remaining = BUF_SIZE - buf_index;
+}
+
+/*
+ *get_buf - returns a pointer to the buffer used for storing received data. 
+ *
+ *Return : pointer to received data. 
+ */
+uint8_t * get_buf(void)
+{
+	return buf;
 }
 
 /*
@@ -30,7 +47,7 @@ static void input_handler(int x)
  */
 uint32_t get_total_bytes_received(void)
 {
-	return total_bytes_received;
+	return buf_index;
 }
 
 /*
