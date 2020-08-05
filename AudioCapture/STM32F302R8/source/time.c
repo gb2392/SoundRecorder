@@ -4,6 +4,8 @@
 #include "serial.h"
 #include <stdint.h>
 
+static volatile uint32_t delay_down_counter_ms = 0;
+
 /*
  *systick_setup - configures the SysTick hardware for use as a time base. 
  *
@@ -44,4 +46,19 @@ void SysTick_Handler(void)
 {
         // Verify that the SysTick handler is running by toggling an output.
         TOGGLE_PC6;
+
+        if(delay_down_counter_ms)
+        {
+                delay_down_counter_ms--;
+        }
+}
+
+/*
+ *delay_ms - stops the program for the argued time. 
+ *uint32_t delay_time_us        : the amount of time to wait, in milliseconds.
+ */
+void delay_ms(uint32_t delay_time_ms)
+{
+        delay_down_counter_ms = delay_time_ms;
+        while(delay_down_counter_ms);
 }
