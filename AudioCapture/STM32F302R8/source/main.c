@@ -3,6 +3,7 @@
 #include "debug.h"
 #include "time.h"
 #include "serial.h"
+#include "adc.h"
 #include <stdint.h>
 
 /*
@@ -25,6 +26,9 @@ void main(void)
         debug_setup();
         systick_setup();
         usart_1_setup();
+        adc_setup();
+
+        while(1);
 
         while(1)
         {      

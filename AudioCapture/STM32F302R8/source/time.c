@@ -2,6 +2,7 @@
 #include "time.h"
 #include "debug.h"
 #include "serial.h"
+#include "adc.h"
 #include <stdint.h>
 
 static volatile uint32_t delay_down_counter_ms = 0;
@@ -50,6 +51,11 @@ void SysTick_Handler(void)
         if(delay_down_counter_ms)
         {
                 delay_down_counter_ms--;
+        }
+        
+        if(adc_can_start())
+        {
+                adc_set_ADSTART();
         }
 }
 
