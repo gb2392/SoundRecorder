@@ -26,7 +26,8 @@ void main(void)
         debug_setup();
         systick_setup();
         usart_1_setup();
-        adc_setup();
+        //adc_setup();
+        adc_drive_timer_setup();
 
         while(1);
 

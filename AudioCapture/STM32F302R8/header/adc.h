@@ -12,5 +12,6 @@ typedef enum
 void adc_setup(void);
 void adc_set_ADSTART(void);
 uint8_t adc_can_start(void);
+void adc_drive_timer_setup(void);
 
 #endif
