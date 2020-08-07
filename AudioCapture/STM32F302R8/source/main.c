@@ -26,8 +26,15 @@ void main(void)
         debug_setup();
         systick_setup();
         usart_1_setup();
-        //adc_setup();
+
+        /*ADC should be configured before its driving timer.*/
+        adc_setup();            
         adc_drive_timer_setup();
+
+        if(adc_can_start())
+        {
+                adc_set_ADSTART();
+        }
 
         while(1);
 

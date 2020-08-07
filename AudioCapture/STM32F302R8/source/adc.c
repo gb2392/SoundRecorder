@@ -1,5 +1,6 @@
 #include "adc.h"
 #include "time.h"
+#include "debugio.h"
 
 static uint8_t adc_state = ADC_STATE_NOT_CONFIGURED;
 
@@ -72,7 +73,26 @@ void adc_setup(void)
         // Single conversion mode
         ADC1->CFGR &= ~ADC_CFGR_CONT;
 
+        // Select the external trigger for the ADC (TIM1_CC1).
+        ADC1->CFGR &= ~ADC_CFGR_EXTSEL;
+
+        // Select the trigger polarity (falling edge). 
+        ADC1->CFGR &= ~ADC_CFGR_EXTEN;
+        ADC1->CFGR |= ADC_CFGR_EXTEN_1;
+
+        // Enable the end-of-conversion (EOC) interrupt. 
+        ADC1->IER |= ADC_IER_EOCIE;
+
+        // Enable the interrupt request
+        NVIC_EnableIRQ(ADC1_2_IRQn);
+
         adc_state = ADC_STATE_CONFIGURED;
+}
+
+void ADC1_IRQHandler(void)
+{
+        static uint32_t index = 0;
+        debug_printf("Got: %u at index: %d\n", ADC1->DR, index++);
 }
 
 /*
@@ -139,6 +159,16 @@ void adc_drive_timer_setup(void)
 
         // Set the main output enable bit
         TIM1->BDTR |= TIM_BDTR_MOE;
+
+        // Enable the event generation on CC1
+        TIM1->EGR |= TIM_EGR_CC1G;
+
+        // Enable the trigger generation
+        TIM1->EGR |= TIM_EGR_TG;
+
+        // Set for OC1REF to be used as TRGO2
+        TIM1->CR2 &= ~TIM_CR2_MMS;
+        TIM1->CR2 |= TIM_CR2_MMS_2;
 
         // Enable the counter
         TIM1->CR1 |= TIM_CR1_CEN;

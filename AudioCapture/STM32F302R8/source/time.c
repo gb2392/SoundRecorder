@@ -55,7 +55,7 @@ void SysTick_Handler(void)
         
         if(adc_can_start())
         {
-                adc_set_ADSTART();
+                //adc_set_ADSTART();
         }
 }
 
