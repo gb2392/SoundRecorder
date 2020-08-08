@@ -1,5 +1,6 @@
 #include "stm32f302x8.h"
 #include "clock_configuration.h"
+#include "dma_serial_manager.h"
 #include "debug.h"
 #include "time.h"
 #include "serial.h"
@@ -26,10 +27,12 @@ void main(void)
         debug_setup();
         systick_setup();
         usart_1_setup();
+        dma_serial_manager_setup();
 
         /*ADC should be configured before its driving timer.*/
         adc_setup();            
         adc_drive_timer_setup();
+       
 
         if(adc_can_start())
         {

@@ -81,7 +81,13 @@ void adc_setup(void)
         ADC1->CFGR |= ADC_CFGR_EXTEN_1;
 
         // Enable the end-of-conversion (EOC) interrupt. 
-        ADC1->IER |= ADC_IER_EOCIE;
+        //ADC1->IER |= ADC_IER_EOCIE;
+
+        // Enable DMA ops for ADC conversions
+        ADC1->CFGR |= ADC_CFGR_DMAEN;
+
+        // Set DMA one shot mode
+        ADC1->CFGR &= ~ADC_CFGR_DMACFG;
 
         // Enable the interrupt request
         NVIC_EnableIRQ(ADC1_2_IRQn);
@@ -159,16 +165,6 @@ void adc_drive_timer_setup(void)
 
         // Set the main output enable bit
         TIM1->BDTR |= TIM_BDTR_MOE;
-
-        // Enable the event generation on CC1
-        TIM1->EGR |= TIM_EGR_CC1G;
-
-        // Enable the trigger generation
-        TIM1->EGR |= TIM_EGR_TG;
-
-        // Set for OC1REF to be used as TRGO2
-        TIM1->CR2 &= ~TIM_CR2_MMS;
-        TIM1->CR2 |= TIM_CR2_MMS_2;
 
         // Enable the counter
         TIM1->CR1 |= TIM_CR1_CEN;
