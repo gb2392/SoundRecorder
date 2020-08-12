@@ -3,6 +3,9 @@
 #include "input_handling.h"
 #include <stdio.h>
 #include <termios.h>
+#include <pthread.h>
+#include <sched.h>
+#include <unistd.h>
 
 /*
  *main - sets up program data and implements an infinite loop to run. 
@@ -10,12 +13,13 @@
  *This function establishes variables related to storage media and serial 
  *communication, calls initialization routines, and implements an infinite loop
  *for runtime operation. 
- *       
+ *
+ *Notes: B230400 appears to work well enough. B921600 doesn't. 
  */
 void main(void)
-{
+{	
 	FILE * media_fp = fopen("dat", "w");
-	int port_fd = serial_setup("/dev/serial0", B921600);
+	int port_fd = serial_setup("/dev/serial0", B576000);
 
 	if(input_handling_setup(port_fd, media_fp) == 0)
 	{
