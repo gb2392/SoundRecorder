@@ -80,9 +80,6 @@ void adc_setup(void)
         ADC1->CFGR &= ~ADC_CFGR_EXTEN;
         ADC1->CFGR |= ADC_CFGR_EXTEN_1;
 
-        // Enable the end-of-conversion (EOC) interrupt. 
-        //ADC1->IER |= ADC_IER_EOCIE;
-
         // Enable DMA ops for ADC conversions
         ADC1->CFGR |= ADC_CFGR_DMAEN;
 
@@ -93,12 +90,6 @@ void adc_setup(void)
         NVIC_EnableIRQ(ADC1_2_IRQn);
 
         adc_state = ADC_STATE_CONFIGURED;
-}
-
-void ADC1_IRQHandler(void)
-{
-        static uint32_t index = 0;
-        debug_printf("Got: %u at index: %d\n", ADC1->DR, index++);
 }
 
 /*
@@ -139,13 +130,13 @@ void adc_drive_timer_setup(void)
         TIM1->CR1 &= ~TIM_CR1_DIR;
 
         // Select the counter clock prescale factor
-        TIM1->PSC = 239;
+        TIM1->PSC = 23;
 
         // Set the auto-reload register
-        TIM1->ARR = 65535;
+        TIM1->ARR = 49;
 
         // Set the capture compare register
-        TIM1->CCR1 = 32000;
+        TIM1->CCR1 = 24;
 
         // Set the output to toggle on match
         TIM1->CCMR1 &= ~TIM_CCMR1_OC1M;

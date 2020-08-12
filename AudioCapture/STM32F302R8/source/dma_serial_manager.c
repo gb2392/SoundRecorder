@@ -5,6 +5,7 @@
 
 static uint16_t sample_buf_0[SAMPLE_BUF_SIZE];
 static uint16_t sample_buf_1[SAMPLE_BUF_SIZE];
+static uint32_t samples_sent = 0;
 
 void dma_serial_manager_setup(void)
 {
@@ -65,17 +66,17 @@ void DMA1_Channel1_IRQHandler(void)
         // Clear the global interrupt flag
 
         // Start transmitting buffered data
-        usart_1_transmit((void *)(DMA1_Channel1->CMAR), SAMPLE_BUF_SIZE);
+        usart_1_transmit((void *)(DMA1_Channel1->CMAR), SAMPLE_BUF_SIZE * sizeof(uint16_t));
+        samples_sent += SAMPLE_BUF_SIZE;
+        debug_printf("samples sent: %08u\r", samples_sent);
 
         if(DMA1_Channel1->CMAR == (uint32_t)sample_buf_0)
         {
                 DMA1_Channel1->CMAR = (uint32_t)sample_buf_1;
-                debug_printf("switching to buffer 1\n");
         }
         else
         {
                 DMA1_Channel1->CMAR = (uint32_t)sample_buf_0;
-                debug_printf("switching to buffer 0\n");
         }
 
         // Reload the count register
@@ -84,5 +85,7 @@ void DMA1_Channel1_IRQHandler(void)
         // Reactivate DMA channel 1
         DMA1_Channel1->CCR |= DMA_CCR_EN;
 
-        ADC1->CR |= ADC_CR_ADSTART;
+        if(samples_sent < 1200000)
+        //if(samples_sent < 10000)
+                ADC1->CR |= ADC_CR_ADSTART;
 }

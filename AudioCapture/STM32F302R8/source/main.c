@@ -15,14 +15,10 @@
  *      -the SysTick hardware to produce interrupts on a 1 ms basis 
  *      -the USART 1 peripheral to be used for data transmission 
  *
- *Otherwise, it is being used for tests and development. 
+ *Otherwise, it starts ADC conversions and loops endlessly. 
  */
 void main(void)
 {
-        const uint32_t COUNT_MAX = 500000;
-        uint8_t test_vector[] = { 0xab, 0xcd, 0xef, 0xde, 0xad, 0xbe, 0xef, 0xcf, 0x1A , 0x32 };
-        uint32_t count = 0;
-
         clock_setup();
         debug_setup();
         systick_setup();
@@ -33,25 +29,12 @@ void main(void)
         adc_setup();            
         adc_drive_timer_setup();
        
-
         if(adc_can_start())
         {
+                // Get things going...
                 adc_set_ADSTART();
         }
 
+        // Loop endlessly. Timer, DMA and USART take care of everything else.
         while(1);
-
-        while(1)
-        {      
-                if(is_usart_1_ready())
-                {
-                        usart_1_transmit((void *)test_vector, 10);
-                        count++;
-                }
-
-                if(count == COUNT_MAX)
-                {
-                        break;
-                }
-        }
 }

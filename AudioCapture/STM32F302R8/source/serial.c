@@ -4,6 +4,41 @@
 
 static USART_1_RUNTIME usart_1_runtime = { .state = USART_1_STATE_NOT_CONFIGURED };
 
+#if (ENABLE_INJECTION > 0)
+
+/*
+ *injected_value - facilitates placement of custom data for transmission. 
+ */
+static uint8_t injected_value(void)
+{
+#if (INJECTION_TYPE_TEST > 0)
+        volatile static uint8_t ret = 0;
+        volatile static uint8_t msb = 0;
+        volatile static uint16_t value = 0;
+
+        if(msb)
+        {
+                // return the msbyte
+                ret = (uint8_t)((value >> 8) & 0xff);
+                value++;
+                msb = 0;
+        }
+        else
+        {
+                // return the lsbyte
+                ret = (uint8_t)(value & 0xff);
+                msb = 1;
+        }
+
+        return ret; 
+#elif (INJECTION_TYPE_12_BIT_ENC > 0)
+        
+#else
+        return 0;
+#endif
+}
+#endif
+
 /*
  *usart_1_setup - configures USART 1 peripheral
  *
@@ -19,7 +54,7 @@ static USART_1_RUNTIME usart_1_runtime = { .state = USART_1_STATE_NOT_CONFIGURED
 void usart_1_setup(void)
 {
         const uint32_t USART_1_CLOCK_FREQUENCY = 24000000;
-        const uint32_t USART_1_BAUD_RATE = 921600;
+        const uint32_t USART_1_BAUD_RATE = 576000;
 
         // Configure PC4 for use as USART 1 Tx
         
@@ -116,7 +151,12 @@ void usart_1_transmit(void * data, uint32_t length)
         usart_1_runtime.tx_index = 0;
         
         // Send the zeroth byte
+#if (ENABLE_INJECTION > 0)
+        usart_1_runtime.tx_index++;
+        USART1->TDR = injected_value();
+#else
         USART1->TDR = usart_1_runtime.tx_data[usart_1_runtime.tx_index++];
+#endif
 
         // Enable the TX complete (TC) interrupt
         USART1->CR1 |= USART_CR1_TCIE;
@@ -148,12 +188,23 @@ void USART1_IRQHandler(void)
                 {
                         // When there is just one more byte to send
                         USART1->CR1 &= ~USART_CR1_TXEIE;
+#if (ENABLE_INJECTION > 0)
+                        usart_1_runtime.tx_index++;
+                        USART1->TDR = injected_value();
+#else
                         USART1->TDR = usart_1_runtime.tx_data[usart_1_runtime.tx_index++];
+#endif
                 }
                 else
                 {
                         // When there are multiple bytes left to send
+#if (ENABLE_INJECTION > 0)
+                        usart_1_runtime.tx_index++;
+                        USART1->TDR = injected_value();
+#else
                         USART1->TDR = usart_1_runtime.tx_data[usart_1_runtime.tx_index++];
+#endif
+                        
                 }
         }
 }
