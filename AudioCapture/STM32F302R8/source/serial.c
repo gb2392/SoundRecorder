@@ -1,43 +1,9 @@
 #include "stm32f302x8.h"
 #include "serial.h"
+#include "injector.h"
 #include <stdint.h>
 
 static USART_1_RUNTIME usart_1_runtime = { .state = USART_1_STATE_NOT_CONFIGURED };
-
-#if (ENABLE_INJECTION > 0)
-
-/*
- *injected_value - facilitates placement of custom data for transmission. 
- */
-static uint8_t injected_value(void)
-{
-#if (INJECTION_TYPE_TEST > 0)
-        volatile static uint8_t ret = 0;
-        volatile static uint8_t msb = 0;
-        volatile static uint16_t value = 0;
-
-        if(msb)
-        {
-                // return the msbyte
-                ret = (uint8_t)((value >> 8) & 0xff);
-                value++;
-                msb = 0;
-        }
-        else
-        {
-                // return the lsbyte
-                ret = (uint8_t)(value & 0xff);
-                msb = 1;
-        }
-
-        return ret; 
-#elif (INJECTION_TYPE_12_BIT_ENC > 0)
-        
-#else
-        return 0;
-#endif
-}
-#endif
 
 /*
  *usart_1_setup - configures USART 1 peripheral
