@@ -35,4 +35,4 @@ and subsequently sent in batches to the Raspberry Pi via the microcontroller ser
     * Appears to get worse with higher baud rates.
     * Given current serial configuration (baud rate 576000), tests showed around seven dropped bytes for every million bytes transferred. Not too bad overall, but...
     * Because the data constitute little endian 2-byte samples, dropped data can mess with interpretation of received data later on. 
-      * An approach to recover from the presence of dropped bytes in a received data is in development. See "decoder.c/h". 
+    * An approach to recover from the presence of dropped bytes in a received data is in development. See "decoder.c/h". 
