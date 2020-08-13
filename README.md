@@ -33,6 +33,6 @@ and subsequently sent in batches to the Raspberry Pi via the microcontroller ser
   * Concern: data transmitted from the microcontroller don't always end up in the receive buffer on the Raspberry Pi. 
     * It is possible that the system misses incoming data because the data rate is too high, and the UART is not visited often enough to read all available data before new data arrives.
     * Appears to get worse with higher baud rates.
-    * Given current serial configuration (baud rate 576000), tests showed around seven dropped bytes for every million bytes transferred. Not too bad overall, but...
+    * Given current serial configuration (baud rate 576000), tests showed around seven dropped bytes for every million bytes transferred. For audio purposes, not too bad overall, but...
     * Because the data constitute little endian 2-byte samples, dropped data can mess with interpretation of received data later on. 
     * An approach to recover from the presence of dropped bytes in a received data is in development. See "decoder.c/h". 
