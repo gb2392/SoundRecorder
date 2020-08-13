@@ -22,7 +22,7 @@ and subsequently sent in batches to the Raspberry Pi via the microcontroller ser
   * Is using a hardware timer to trigger ADC conversions, which the DMA then automatically stores in memory, absent intervention by the processor, except for when a buffer is filled and the DMA "transfer complete" ISR runs.
     * Sample Rate : 10 kHz
     * Sample Resolution : 12 bits
-  * As ADC conversions are taking place and are buffered by the DMA, the microcontroller is transmitting available samples via the USART 1 peripheral.
+  * As ADC conversions are taking place and buffered by the DMA, the microcontroller is transmitting available samples via the USART 1 peripheral.
     * Baud Rate : 576000 bits / second
     * Parity : None
     * Data Bits : 8
