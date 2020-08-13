@@ -22,13 +22,13 @@ and subsequently sent in batches to the Raspberry Pi via the microcontroller ser
   * Is using a hardware timer to trigger ADC conversions, which the DMA then automatically stores in memory, absent intervention by the processor, except for when a buffer is filled and the DMA "transfer complete" ISR runs.
     * Sample Rate : 10 kHz
     * Sample Resolution : 12 bits
-  * As ADC conversions are taking place and are buffered by the DMA, the microcontroller is transmitting available samples via USART 1 peripheral.
+  * As ADC conversions are taking place and are buffered by the DMA, the microcontroller is transmitting available samples via the USART 1 peripheral.
     * Baud Rate : 576000 bits / second
     * Parity : None
     * Data Bits : 8
 * Raspberry Pi
   * Software configures the PL011 UART (serial peripheral) to listen for incoming data, which are then buffered.
-    * Because the platform is a Raspberry Pi Model 3 B+, it was necessary to remap the PL011 UART from Bluetooth module back to GPIO header pins.
+    * Because the platform is a Raspberry Pi Model 3 B+, it was necessary to remap the PL011 UART from the Bluetooth module back to GPIO header pins.
     * The software is started from the terminal; the Raspberry Pi listens and buffers data until user enters 'q' and presses return, at which point, buffered data are written to a file and the program terminates.  
   * Concern: data transmitted from the microcontroller don't always end up in the receive buffer on the Raspberry Pi. 
     * It is possible that the system misses incoming data because the data rate is too high, and the UART is not visited often enough to read all available data before new data arrives.
