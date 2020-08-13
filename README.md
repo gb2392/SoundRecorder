@@ -18,10 +18,10 @@ and subsequently sent in batches to the Raspberry Pi via the microcontroller ser
 ## Current State
 
 * STM32 microcontroller  
-** Has a successful implementation of a 1 ms time base, using the SysTick hardware and corresponding handler. 
-** Is using a hardware timer to trigger ADC conversions, which the DMA then automatically stores in memory, absent intervention by the processor, except for when a buffer is filled and the DMA conversion complete interrupt service routine runs. 
-*** Sample Rate : 10 kHz
-*** Resolution : 12-bit
++ Has a successful implementation of a 1 ms time base, using the SysTick hardware and corresponding handler. 
++ Is using a hardware timer to trigger ADC conversions, which the DMA then automatically stores in memory, absent intervention by the processor, except for when a buffer is filled and the DMA conversion complete interrupt service routine runs. 
+- Sample Rate : 10 kHz
+- Resolution : 12-bit
 ** In real time, as ADC conversions are taking place and buffered by the DMA, the microcontroller is transmitting available samples via USART 1 peripheral. 
 *** Baud Rate : 576000 bits / second
 *** Parity : None
