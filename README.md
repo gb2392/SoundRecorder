@@ -27,11 +27,11 @@ and subsequently sent in batches to the Raspberry Pi via the microcontroller ser
     * Parity : None
     * Data Bits : 8
 * Raspberry Pi
-  * Software now configures the PL011 UART (serial peripheral) to listen for incoming data, which are then buffered.
+  * Software configures the PL011 UART (serial peripheral) to listen for incoming data, which are then buffered.
     * Because the platform is a Raspberry Pi Model 3 B+, it was necessary to remap the PL011 UART from Bluetooth module back to GPIO header pins.
-  * User runs a console app which invokes configuration of UART and buffering effort. Entering 'q', then return while in the terminal ends the buffering, and causes the buffered data to be written to file. Program then exits.
+    * The software is started from the terminal; the Raspberry Pi listens and buffers data until user enters 'q' and presses return, at which point, buffered data are written to a file and the program terminates.  
   * Concern: data transmitted from the microcontroller don't always end up in the receive buffer on the Raspberry Pi. 
-    * It is possible that the RPI OS "misses" incoming data because the data rate is too high, and the UART is visited often enough by the application to get available data. 
+    * It is possible that the system misses incoming data because the data rate is too high, and the UART is not visited often enough to read all available data before new data arrives.
     * Appears to get worse with higher baud rates.
     * Given current serial configuration (baud rate 576000), tests showed around seven dropped bytes for every million bytes transferred. Not too bad overall, but...
     * Because the data constitute little endian 2-byte samples, dropped data can mess with interpretation of received data later on. 
