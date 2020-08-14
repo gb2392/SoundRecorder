@@ -66,14 +66,14 @@ DATA_INJECTOR injected_value = injector_test;
  *12-bit samples stored in two bytes, with little endian ordering. Example:
  *
  *Original 12-bit Sample:
- *byte 0 (LSB): [7:4 unused | 3:0 are the upper 4 bits of the sample]
- *byte 1 (MSB): [7:0 are the lower 8 bits of the sample]
+ *byte 0 (LSB): [7:0 are the lower 8 bits of the sample]
+ *byte 1 (MSB): [7:4 unused | 3:0 are the upper 4 bits of the sample]
  *
  *Encoded Pair (what ends up actually being transmitted):
  *byte 0 (LSB): [7:6 pair code | 5:0 lower 6 bits of sample]
  *byte 1 (MSB): [7:6 pair code | 5:2 upper 4 bits of sample | 1:0 are bits 7:6 of sample]
  *
- *Return : uint8_t of fixed value (0x0f).
+ *Return : uint8_t with encoded pair code and sample bits. 
  */
 uint8_t injector_12_bit_enc(void)
 {
