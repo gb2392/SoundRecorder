@@ -15,6 +15,10 @@ An effort to create a system capable of capturing audio, and storing it to a fil
 Analog-to-digital conversion of the microphone / pre-amp output will be facilitated by the STM32 microcontroller. As conversions occur, the samples will be staged 
 and subsequently sent in batches to the Raspberry Pi via the microcontroller serial port. The Raspberry Pi will receive and store the audio samples in a file. 
 
+
+![Figure 1 : System Overview](Diagrams/setup.JPG?raw=true)
+
+
 ## Current State
 
 * STM32 microcontroller
@@ -35,6 +39,14 @@ and subsequently sent in batches to the Raspberry Pi via the microcontroller ser
     * Appears to get worse with higher baud rates.
     * Given current serial configuration (baud rate 576000), tests showed around seven dropped bytes for every million bytes transferred. For audio purposes, not too bad overall, but...
     * Because the data constitute little endian 2-byte samples, dropped data can mess with interpretation of received data later on. 
-    * An approach to recover from the presence of dropped bytes in received data is in development. See "decoder.c/h". 
+ 
+ 
+    ![Figure 2 : Dropped Data Issue](Diagrams/byte_drop_illustration.JPG?raw=true)
+ 
+ 
+    * An approach has been developed to recover from dropped bytes. Since the each sample is only 12-bits, but is contained in 2-byte, 16-bit integers, there are four unused bits for every sample sent. By moving the sample bits in such a way as to split up the four unused bits between both the most significant and least significant bytes, it becomes possible to allocate two bits at the top of each byte. Within these bits are stored a number (0 - 3), which will be the same for both the most and least significant bytes. Let this number be called a "pair code". This pair code also increments by one every time a complete sample is sent, and of course, rolls over after three back to zero. Software on the receiving end (the Raspberry Pi in this case) then has a means of regaining traction with data downstream of lost bytes. 
+    
+    
+    ![Figure 3 : Encoding of Sample Data and Pair Codes for Transmission](Diagrams/pair_coding.JPG?raw=true)
 
-![Example](Diagrams/Example.JPG?raw=true)
+
