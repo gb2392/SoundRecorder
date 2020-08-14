@@ -86,6 +86,6 @@ void DMA1_Channel1_IRQHandler(void)
         DMA1_Channel1->CCR |= DMA_CCR_EN;
 
         //if(samples_sent < 1200000)
-        if(samples_sent < 1000)
+        //if(samples_sent < 1000)
                 ADC1->CR |= ADC_CR_ADSTART;
 }

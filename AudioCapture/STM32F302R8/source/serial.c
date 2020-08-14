@@ -3,7 +3,7 @@
 #include "injector.h"
 #include <stdint.h>
 
-static USART_1_RUNTIME usart_1_runtime = { .state = USART_1_STATE_NOT_CONFIGURED };
+USART_1_RUNTIME usart_1_runtime = { .state = USART_1_STATE_NOT_CONFIGURED };
 
 /*
  *usart_1_setup - configures USART 1 peripheral
@@ -118,8 +118,8 @@ void usart_1_transmit(void * data, uint32_t length)
         
         // Send the zeroth byte
 #if (ENABLE_INJECTION > 0)
-        usart_1_runtime.tx_index++;
         USART1->TDR = injected_value();
+        usart_1_runtime.tx_index++;
 #else
         USART1->TDR = usart_1_runtime.tx_data[usart_1_runtime.tx_index++];
 #endif
@@ -155,8 +155,8 @@ void USART1_IRQHandler(void)
                         // When there is just one more byte to send
                         USART1->CR1 &= ~USART_CR1_TXEIE;
 #if (ENABLE_INJECTION > 0)
-                        usart_1_runtime.tx_index++;
                         USART1->TDR = injected_value();
+                        usart_1_runtime.tx_index++;
 #else
                         USART1->TDR = usart_1_runtime.tx_data[usart_1_runtime.tx_index++];
 #endif
@@ -165,8 +165,8 @@ void USART1_IRQHandler(void)
                 {
                         // When there are multiple bytes left to send
 #if (ENABLE_INJECTION > 0)
-                        usart_1_runtime.tx_index++;
                         USART1->TDR = injected_value();
+                        usart_1_runtime.tx_index++;
 #else
                         USART1->TDR = usart_1_runtime.tx_data[usart_1_runtime.tx_index++];
 #endif

@@ -47,6 +47,8 @@ typedef struct
         uint8_t * tx_data;
 }USART_1_RUNTIME;
 
+extern USART_1_RUNTIME usart_1_runtime;
+
 uint8_t is_usart_1_ready(void);
 void usart_1_setup(void);
 void usart_1_transmit(void * data, uint32_t length);

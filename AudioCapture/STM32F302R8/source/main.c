@@ -28,7 +28,7 @@ void main(void)
         /*ADC should be configured before its driving timer.*/
         adc_setup();            
         adc_drive_timer_setup();
-       
+
         if(adc_can_start())
         {
                 // Get things going...

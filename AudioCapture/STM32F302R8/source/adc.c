@@ -6,8 +6,6 @@ static uint8_t adc_state = ADC_STATE_NOT_CONFIGURED;
 
 /*
  *adc_setup - configures analog to digital converter. 
- *
- *In development / not tested. 
  */
 void adc_setup(void)
 {
